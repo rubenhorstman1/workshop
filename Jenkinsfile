@@ -1,11 +1,11 @@
-Pipeline{
-Agent{
+pipeline{
+agent{
         docker {
             image 'maven:3-alpine'
             args '-v /root/.m2:/root/.m2'
         }
 }
-Stages{
+stages{
     stage('unittests'){
 	steps{
 	sh 'mvn test'
@@ -15,9 +15,15 @@ steps{
 sh 'mvn org.pitest:pitest-maven:mutationCoverage' 
 
 }
-Post{
-//welke stappen moeten gebeuren na de stages (vaak stappen mbt reporting)
+post{
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+    }	
+}}
+
+
 }
-}
+
 
 
